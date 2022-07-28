@@ -46,7 +46,7 @@ def gradient(X, y, w, b, lambda_= 0):
     dj_db = 0
     
     for i in range(m):
-        err = function(X[i], w, b) - y[i]
+        err = predict(X[i], w, b) - y[i]
         for j in range(n):
             dj_dw[j] = dj_dw[j] + err * X[i][j]
         dj_db += err
