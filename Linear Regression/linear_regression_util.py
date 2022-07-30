@@ -84,7 +84,7 @@ def gradient_descent(X, y, init_w, init_b, alpha, cost_function, gradient_functi
             calced_cost = cost_function(X, y, w, b)
             hist.append([i, w, b, calced_cost])
             if print_progress: print(f'i: {i} w={w} b={b} cost={calced_cost}')
-    return w, b
+    return w, b, hist
 
 
 # X is a matrix consisting of m rows (entries) and n columns (features)
