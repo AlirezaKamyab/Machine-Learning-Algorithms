@@ -67,17 +67,23 @@ def gradient(X, y, w, b, lambda_= 0):
 # iterations, number of updates that should be made
 # hist, history of every update
 # lambda is regularization parameter
-def gradient_descent(X, y, init_w, init_b, alpha, cost_function, gradient_function, iterations = 1000, lambda_ = 0):
+# print_progress is a boolean, if true, prints w and b and the cost on each 1/10 of the steps
+def gradient_descent(X, y, init_w, init_b, alpha, cost_function, gradient_function, iterations = 1000,
+                     lambda_ = 0, print_progress = True):
     w = copy.deepcopy(init_w)
     b = init_b
+    hist = []
+    hc = 10 ** max([0, np.log10(iterations) - 1])
     
     for i in range(1, iterations + 1):
         dj_dw, dj_db = gradient_function(X, y, w, b, lambda_)
         w = w - alpha * dj_dw
         b = b - alpha * dj_db
         
-        if i % 1000 == 0:
-            print(f'i: {i} w={w} b={b} cost={cost_function(X, y, w, b)}')
+        if i % hc == 0:
+            calced_cost = cost_function(X, y, w, b)
+            hist.append([i, w, b, calced_cost])
+            if print_progress: print(f'i: {i} w={w} b={b} cost={calced_cost}')
     return w, b
 
 
