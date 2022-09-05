@@ -63,17 +63,39 @@ def move_centroids(X, idx, centroids):
 # Runs k_mean algorithm to find clusters in the data
 # X ndarray - Matrix of data with m rows and n columns which are data and features respectively
 # initial_centeroids vector - n row and K columns; initial values for each centroid
+# max_iter int - Number of times to move centroids and update points
 # returns centeroid and idx
-def k_mean(X, initial_centroids, max_iter):
+def k_mean(X, initial_centroids, max_iter, verbos=True):
     centroids = initial_centroids
     K = initial_centroids.shape[0]
     idx = np.zeros(X.shape[0], dtype='int')
     for i in range(1, max_iter + 1):
-        print(f'Iteration {i}/{max_iter}')
+        if verbos: print(f'Iteration {i}/{max_iter}')
         idx = assign_centroids(X, centroids)
         centroids = move_centroids(X, idx, centroids)
-        print(f'Cost: {cost(X, idx, centroids)}')
+        if verbos: print(f'Distortion: {cost(X, idx, centroids)}')
     return centroids, idx
+
+
+# Runs k_mean multiple times and chooses the one with least distortion
+# X ndarray - Matrix of data with m rows and n columns which are data and features respectively
+# K int - Number of clusters
+# max_iter int - Number of times to move centroids and update points for each k_mean run
+# out_of int - Run k_mean multiple times and choose the best one out of "out_of"
+# returns centeroid and idx
+def k_mean_optimization(X, K, max_iter, out_of=100, verbos=True):
+    min_cost = -1
+    outcome = ()
+    for i in range(1, out_of + 1):
+        if verbos: print(f'Iteration {i}/{out_of}')
+        initial_centroids = random_initial_centroids(X, K)
+        centroids, idx = k_mean(X, initial_centroids, max_iter, False)
+        c = cost(X, idx, centroids)
+        if min_cost == -1 or c < min_cost:
+            min_cost = c
+            outcome = (centroids, idx)
+        if verbos: print(f'Distortion: {c}')
+    return outcome
 
 
 # Randomly chooses K points to be initial centeroids
