@@ -95,6 +95,7 @@ def k_mean_optimization(X, K, max_iter, out_of=100, verbos=True):
             min_cost = c
             outcome = (centroids, idx)
         if verbos: print(f'Distortion: {c}')
+    if verbos: print(f'\nDistortion {min_cost} is chosen!')
     return outcome
 
 
